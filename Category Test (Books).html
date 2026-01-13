@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Book Archive — Catalog (Librarian)</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto&family=Playfair+Display:ital,wght@0,400;1,600&display=swap');
+        * {
+            box-sizing: border-box
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f5deb3 url('Final Background.png') center/cover no-repeat;
+            background-attachment: fixed;
+            font-family: 'Roboto', sans-serif;
+            color: #3b2f2f
+        }
+        
+        header {
+            background: #b47a38;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 24px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+            position: sticky;
+            top: 0;
+            z-index: 1000
+        }
+        
+        .title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 28px;
+            color: #fff
+        }
+        
+        .welcome {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+        
+        .welcome button {
+            margin-left: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #fff;
+            color: #4b2e05;
+            font-weight: 600
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 22px auto;
+            padding: 0 20px
+        }
+        
+        h1 {
+            text-align: center;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 40px;
+            color: #4b2e05;
+            margin: 20px 0
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap
+        }
+        
+        .search-box {
+            width: 320px;
+            padding: 12px 14px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            font-size: 15px
+        }
+        
+        .search-btn {
+            padding: 12px 14px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer
+        }
+        
+        .category-select {
+            padding: 12px 14px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            font-size: 15px
+        }
+        
+        .btn-secondary {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #fff;
+            cursor: pointer
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 22px;
+            margin-top: 16px
+        }
+        
+        .book-card {
+            background: rgba(255, 255, 255, .96);
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+            text-align: center;
+            position: relative
+        }
+        
+        .book-card img {
+            width: 120px;
+            height: auto;
+            margin: 4px auto
+        }
+        
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: #4b2e05;
+            margin-top: 8px
+        }
+        
+        .meta {
+            font-size: 13px;
+            color: #333;
+            margin: 6px 0
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 8px
+        }
+        
+        .btn.green {
+            background: #2ecc71
+        }
+        
+        .btn.red {
+            background: #e74c3c
+        }
+        
+        .btn.gray {
+            background: #95a5a6
+        }
+        
+        .small {
+            font-size: 12px;
+            color: #666
+        }
+        
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center
+        }
+        
+        .modal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 420px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .25)
+        }
+        
+        .modal h3 {
+            margin-top: 0
+        }
+        
+        .modal .row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0
+        }
+        
+        .modal button {
+            margin-top: 12px
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f39c12;
+            color: #fff;
+            border-radius: 999px;
+            font-size: 12px
+        }
+        
+        .category-pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px
+        }
+        
+        .admin-row {
+            margin-top: 10px
+        }
+        
+        .three-dot {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 20px
+        }
+        
+        .contract-table {
+            width: 100%;
+            border-collapse: collapse
+        }
+        
+        .contract-table th,
+        .contract-table td {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: left
+        }
+        
+        @media (max-width:560px) {
+            .search-box {
+                width: 160px
+            }
+            .modal {
+                width: 92%
+            }
+        }
+        
+        .cat-Fiction {
+            border-top: 6px solid #9b59b6
+        }
+        
+        .cat-Non-Fiction {
+            border-top: 6px solid #3498db
+        }
+        
+        .cat-Religious {
+            border-top: 6px solid #2ecc71
+        }
+        
+        .cat-Magazines {
+            border-top: 6px solid #e67e22
+        }
+        
+        .cat-Science {
+            border-top: 6px solid #1abc9c
+        }
+        
+        .cat-Technology {
+            border-top: 6px solid #34495e
+        }
+        
+        .cat-Arts {
+            border-top: 6px solid #e74c3c
+        }
+        
+        .cat-Default {
+            border-top: 6px solid #95a5a6
+        }
+        
+        #archList {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+        
+        .contract-table thead th {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 5;
+        }
+        
+        #terminatedContractsContainer table thead th {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 5;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="title">THE BOOK ARCHIVE</div>
+        <div class="welcome" id="welcomeText">Welcome!</div>
+    </header>
+
+    <div class="container">
+        <h1>Library Catalog</h1>
+
+        <div class="controls">
+            <input class="search-box" id="searchBox" placeholder="Search title or ISBN">
+            <button id="searchBtn" class="search-btn">🔎</button>
+            <select class="category-select" id="categorySelect"></select>
+            <!-- librarian-only controls: hidden for students -->
+            <button id="manageCategories" class="btn-secondary librarian-only" title="Add / Remove Categories">Manage Categories</button>
+            <button id="addBookBtn" class="btn-secondary librarian-only" style="display:none">Add Book</button>
+            <button id="viewHistory" class="btn-secondary">My Borrowed History</button>
+            <button id="viewDashboard" class="btn-secondary librarian-only" style="display:none">Librarian Dashboard</button>
+            <button id="viewActiveContracts" class="btn-secondary librarian-only" style="display:none">Active Contracts</button>
+        </div>
+
+        <div id="bookGrid" class="grid-container"></div>
+
+        <!-- borrowed history modal -->
+        <div id="historyModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Borrowed History</h3>
+                <div id="historyList"></div>
+                <button onclick="closeHistory()" class="btn gray">Close</button>
+            </div>
+        </div>
+
+        <!-- borrow confirmation modal (students still use) -->
+        <div id="borrowModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Confirm Borrow</h3>
+                <div class="row">
+                    <div>Student:</div>
+                    <div id="modalStudent"></div>
+                </div>
+                <div class="row">
+                    <div>Book:</div>
+                    <div id="modalBook"></div>
+                </div>
+                <div class="row">
+                    <div>Date:</div>
+                    <div id="modalDate"></div>
+                </div>
+                <button id="confirmBorrowBtn" class="btn green">Confirm Borrow (Request)</button>
+                <button onclick="closeBorrowModal()" class="btn gray">Cancel</button>
+            </div>
+        </div>
+
+        <!-- librarian dashboard modal (pending requests + category mgmt entry) -->
+        <div id="dashboardModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Librarian Dashboard — Pending Requests</h3>
+                <div class="requests-list" id="requestsList"></div>
+                <hr>
+                <div style="text-align:left; margin-top:8px;">
+                    <button id="openCategoryManager" class="btn gray librarian-only">Open Category Manager</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- edit book modal (librarian) -->
+        <div id="editModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Edit Book Data</h3>
+                <div style="margin-bottom:8px"><label>Book Name</label><input id="edit_name" type="text" style="width:100%;padding:8px;margin-top:6px"></div>
+                <div style="margin-bottom:8px"><label>Category</label>
+                    <select id="edit_category" style="width:100%;padding:8px;margin-top:6px"></select>
+                </div>
+                <div style="margin-bottom:8px"><label>Total Quantity</label><input id="edit_quantity" type="number" min="0" style="width:100%;padding:8px;margin-top:6px"></div>
+                <div style="margin-bottom:8px"><label>ISBN Code</label><input id="edit_isbn" type="text" style="width:100%;padding:8px;margin-top:6px"></div>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:6px">
+                    <button id="deleteRecordBtn" class="btn red librarian-only">Delete Record</button>
+                    <button id="updateRecordBtn" class="btn green librarian-only">Update Record</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Book Modal -->
+        <div id="addBookModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Add New Book</h3>
+                <div style='margin-bottom:8px'><label>Book Name</label><input id='newBookName' type='text' style='width:100%;padding:8px;margin-top:6px'></div>
+                <div style='margin-bottom:8px'><label>Category</label><select id='newBookCategory' style='width:100%;padding:8px;margin-top:6px'></select></div>
+                <div style='margin-bottom:8px'><label>Total Quantity</label><input id='newBookQty' type='number' min='0' style='width:100%;padding:8px;margin-top:6px'></div>
+                <div style='margin-bottom:8px'><label>ISBN Code</label><input id='newBookISBN' type='text' style='width:100%;padding:8px;margin-top:6px'></div>
+                <button id='saveNewBookBtn' class='btn green librarian-only'>Add Book</button>
+                <button onclick='closeAddBook()' class='btn gray'>Cancel</button>
+            </div>
+        </div>
+
+        <!-- contract history modal -->
+        <div id="contractModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Contract History</h3>
+                <div id="contractList"></div>
+                <button onclick="closeContractModal()" class="btn gray">Close</button>
+            </div>
+        </div>
+
+        <!-- active contracts modal -->
+        <div id="activeContractsModal" class="modal-backdrop">
+            <div class="modal" style="width:90%; max-width:900px;">
+                <h3>Active Contracts</h3>
+                <div style="display:flex; gap:8px; margin-bottom:8px;">
+                    <input id="activeSearch" placeholder="Search resource or holder" style="flex:1;padding:8px;">
+                    <button id="markSelectedTerminated" class="btn red librarian-only" title="Mark selected as terminated">Mark Terminated</button>
+                </div>
+                <div id="activeContractsContainer" style="max-height:450px; overflow-y:auto; margin-bottom:10px; border:1px solid #ddd; padding:4px; border-radius:6px;">
+                </div>
+
+                <button onclick="closeActiveContracts()" class="btn gray">Close</button>
+            </div>
+        </div>
+
+        <!-- category manager modal -->
+        <div id="categoryModal" class="modal-backdrop">
+            <div class="modal">
+                <h3>Category Management</h3>
+                <div style="margin-bottom:8px"><input id="newCategoryInput" placeholder="New Category name" style="width:100%;padding:8px;margin-top:6px"></div>
+                <div style="display:flex; gap:8px; margin-bottom:12px"><button id="addCategoryBtn" class="btn green librarian-only">Add Category</button><button id="closeCatBtn" class="btn gray">Close</button></div>
+                <div><strong>Existing Categories</strong></div>
+                <div id="categoriesList" style="max-height:200px; overflow:auto; margin-top:8px"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /*******************************
+         * Rewritten JavaScript - full functionality
+         * - Implements: category management, search, edit/add/delete books,
+         *   contract history (3-dot), active contracts (search + mark terminated),
+         *   terminated contracts (search + date filter + delete), borrow flow,
+         *   pending requests approval/deny, archive, toasts, robust persistence.
+         *******************************/
+
+        // ====== Storage keys and helpers ======
+        const BOOKS_KEY = 'books_data_v1';
+        const REQUESTS_KEY = 'borrow_requests_v1';
+        const ARCHIVE_HISTORY_KEY = 'archive_history_v1';
+        const HISTORY_KEY = 'borrow_history_v1';
+        const CATEGORIES_KEY = 'categories_v1';
+        const CONTRACTS_KEY = 'contracts_v1';
+        const SESSION_KEY = 'logged_in_user';
+
+        const $ = id => document.getElementById(id);
+
+        function save(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function load(key) {
+            try {
+                const v = localStorage.getItem(key);
+                return v ? JSON.parse(v) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // seed default data if missing
+        function seedData() {
+            if (!load(CATEGORIES_KEY)) save(CATEGORIES_KEY, ['Fiction', 'Non-Fiction', 'Religious', 'Magazines', 'Science', 'Technology', 'Arts']);
+            if (!load(BOOKS_KEY)) {
+                const sample = [{
+                    id: 1,
+                    title: "Fiction High School Level",
+                    copies: 3,
+                    category: "Fiction",
+                    img: 'book1.png',
+                    isbn: '978-0-111'
+                }, {
+                    id: 2,
+                    title: "Religious Book",
+                    copies: 2,
+                    category: "Religious",
+                    img: 'book2.png',
+                    isbn: '978-0-222'
+                }, {
+                    id: 3,
+                    title: "Magazines National Geographic",
+                    copies: 5,
+                    category: "Magazines",
+                    img: 'book3.png',
+                    isbn: '978-0-333'
+                }, {
+                    id: 4,
+                    title: "Fiction New Release",
+                    copies: 4,
+                    category: "Fiction",
+                    img: 'book4.png',
+                    isbn: '978-0-444'
+                }];
+                save(BOOKS_KEY, sample);
+            }
+            if (!load(REQUESTS_KEY)) save(REQUESTS_KEY, []);
+            if (!load(HISTORY_KEY)) save(HISTORY_KEY, []);
+            if (!load(ARCHIVE_HISTORY_KEY)) save(ARCHIVE_HISTORY_KEY, []);
+            if (!load(CONTRACTS_KEY)) save(CONTRACTS_KEY, []);
+        }
+        seedData();
+
+        // ====== Session handling (keeps original behavior) ======
+        const session = load(SESSION_KEY);
+        if (!session) {
+            // If no session detected, keep behavior—redirect to index (existing app behavior).
+            // If you're testing locally and want to avoid redirect, uncomment the next line to simulate a librarian session:
+            // localStorage.setItem(SESSION_KEY, JSON.stringify({ name:'Test Librarian', role:'Librarian' })); location.reload();
+            window.location.href = 'index.html';
+        }
+
+        const welcomeText = $('welcomeText');
+        welcomeText.innerHTML = `Welcome, ${session.name} (${session.role}) <button id="logoutBtn">Logout</button>`;
+        $('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem(SESSION_KEY);
+            window.location.href = 'index.html';
+        });
+
+        // Role detection
+        const isLibrarian = session.role && session.role.toLowerCase() === 'librarian';
+
+        // Show/hide librarian-only controls explicitly
+        document.querySelectorAll('.librarian-only').forEach(el => {
+            if (isLibrarian) {
+                el.style.display = el.dataset.defaultDisplay || 'inline-block';
+            } else {
+                // hide for students
+                el.style.display = 'none';
+            }
+        });
+
+        // If you need specific controls to be visible inline or block, set data-default-display attributes in HTML or adjust here:
+        // e.g. document.getElementById('addBookBtn').dataset.defaultDisplay = 'inline-block';
+
+        // ====== Data accessor helpers ======
+        function getBooks() {
+            return load(BOOKS_KEY) || [];
+        }
+
+        function saveBooks(v) {
+            save(BOOKS_KEY, v);
+        }
+
+        function getRequests() {
+            return load(REQUESTS_KEY) || [];
+        }
+
+        function saveRequests(v) {
+            save(REQUESTS_KEY, v);
+        }
+
+        function getHistory() {
+            return load(HISTORY_KEY) || [];
+        }
+
+        function saveHistory(v) {
+            save(HISTORY_KEY, v);
+        }
+
+        function getArchive() {
+            return load(ARCHIVE_HISTORY_KEY) || [];
+        }
+
+        function saveArchive(v) {
+            save(ARCHIVE_HISTORY_KEY, v);
+        }
+
+        function getCategories() {
+            return load(CATEGORIES_KEY) || [];
+        }
+
+        function saveCategories(v) {
+            save(CATEGORIES_KEY, v);
+        }
+
+        function getContracts() {
+            return load(CONTRACTS_KEY) || [];
+        }
+
+        function saveContracts(v) {
+            save(CONTRACTS_KEY, v);
+        }
+
+        // ====== UI refs ======
+        const bookGrid = $('bookGrid');
+        const searchBox = $('searchBox');
+        const searchBtn = $('searchBtn');
+        const categorySelect = $('categorySelect');
+
+        // populate category select
+        function populateCategorySelect() {
+            const cats = getCategories();
+            const options = ['<option value="All Categories">All Categories</option>'].concat(cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`));
+            categorySelect.innerHTML = options.join('');
+        }
+
+        function populateEditCategory() {
+            const cats = getCategories();
+            const out = cats.map(c => `<option>${escapeHtml(c)}</option>`).join('');
+            if ($('edit_category')) $('edit_category').innerHTML = out;
+        }
+
+        function populateNewBookCategory() {
+            const cats = getCategories();
+            const el = $('newBookCategory');
+            if (!el) return;
+            el.innerHTML = cats.map(c => `<option>${escapeHtml(c)}</option>`).join('');
+        }
+
+        populateCategorySelect();
+        populateEditCategory();
+
+        // utility: safe escape (for values in option strings)
+        function escapeHtml(s) {
+            if (s === undefined || s === null) return '';
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // compute css class for category
+        function categoryClass(name) {
+            if (!name) return 'cat-Default';
+            return 'cat-' + name.replace(/\s+/g, '-');
+        }
+
+        // ====== Render books grid ======
+        function renderBooks() {
+            const q = (searchBox.value || '').toLowerCase().trim();
+            const category = categorySelect.value || 'All Categories';
+            const books = getBooks().slice().sort((a, b) => a.title.localeCompare(b.title));
+            bookGrid.innerHTML = '';
+            books.forEach(b => {
+                if (category !== 'All Categories' && (b.category || '') !== category) return;
+                if (q) {
+                    const inTitle = (b.title || '').toLowerCase().includes(q);
+                    const inISBN = (b.isbn || '').toLowerCase().includes(q);
+                    if (!inTitle && !inISBN) return;
+                }
+                const card = document.createElement('div');
+                card.className = 'book-card ' + categoryClass(b.category);
+                card.innerHTML = `
+                <button class="three-dot" title="Contract / More">⋯</button>
+                <img src="${escapeHtml(b.img||'book1.png')}" alt="${escapeHtml(b.title)}">
+                <div class="book-title">${escapeHtml(b.title)}</div>
+                <div class="meta"><strong>Category:</strong> <span class="category-pill">${escapeHtml(b.category||'Uncategorized')}</span></div>
+                <div class="meta"><strong>Available Copies:</strong> <span id="copies-${b.id}">${b.copies}</span></div>
+                <div class="meta small"><strong>ISBN:</strong> ${escapeHtml(b.isbn||'—')}</div>
+            `;
+                // three-dot button -> contract history for that book
+                const three = card.querySelector('.three-dot');
+                three.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    openContractHistory(b.id);
+                });
+
+                if (isLibrarian) {
+                    // Edit button
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'btn';
+                    editBtn.style.background = '#3498db';
+                    editBtn.textContent = 'Edit';
+                    editBtn.addEventListener('click', () => openEditModal(b.id));
+                    card.appendChild(editBtn);
+
+                    // admin quick controls
+                    const adminRow = document.createElement('div');
+                    adminRow.className = 'admin-row';
+                    adminRow.style.marginTop = '8px';
+                    adminRow.innerHTML = `<button class='btn' style='background:#2ecc71; margin-right:6px'>+ Copy</button> <button class='btn' style='background:#e67e22'>- Copy</button>`;
+                    const incBtn = adminRow.querySelectorAll('button')[0];
+                    const decBtn = adminRow.querySelectorAll('button')[1];
+                    incBtn.addEventListener('click', () => {
+                        changeCopies(b.id, +1);
+                    });
+                    decBtn.addEventListener('click', () => {
+                        changeCopies(b.id, -1);
+                    });
+                    card.appendChild(adminRow);
+                } else {
+                    // student borrow button
+                    const borrowBtn = document.createElement('button');
+                    borrowBtn.className = 'btn';
+                    if ((b.copies || 0) > 0) {
+                        borrowBtn.classList.add('green');
+                        borrowBtn.textContent = 'Borrow';
+                        borrowBtn.addEventListener('click', () => openBorrowModal(b.id));
+                    } else {
+                        borrowBtn.classList.add('red');
+                        borrowBtn.textContent = 'Not Available';
+                        borrowBtn.disabled = true;
+                    }
+                    card.appendChild(borrowBtn);
+                }
+
+                bookGrid.appendChild(card);
+            });
+        }
+
+        function getBorrowStatus(dateBorrowed, dateReturned = null) {
+            const BORROW_LIMIT_DAYS = 7;
+            const borrowedDate = new Date(dateBorrowed);
+            const now = dateReturned ? new Date(dateReturned) : new Date();
+
+            const diffDays = Math.floor(
+                (now - borrowedDate) / (1000 * 60 * 60 * 24)
+            );
+
+            if (dateReturned) {
+                return diffDays < BORROW_LIMIT_DAYS ? "Returned Early" : "Returned (Overdue)";
+            }
+
+            if (diffDays > BORROW_LIMIT_DAYS) {
+                return "Overdue";
+            }
+
+            return "Borrowed (On Time)";
+        }
+
+
+        searchBox.addEventListener('input', renderBooks);
+        searchBtn.addEventListener('click', renderBooks);
+        categorySelect.addEventListener('change', renderBooks);
+
+        // ====== Copy change helper ======
+        function changeCopies(bookId, delta) {
+            const books = getBooks();
+            const idx = books.findIndex(b => b.id === bookId);
+            if (idx === -1) return;
+            books[idx].copies = Math.max(0, (books[idx].copies || 0) + delta);
+            saveBooks(books);
+            updateCopiesDisplay(bookId, books[idx].copies);
+            renderBooks();
+        }
+
+        function updateCopiesDisplay(bookId, newVal) {
+            const el = $('copies-' + bookId);
+            if (el) el.textContent = newVal;
+        }
+
+        // ====== Borrow flow (students) ======
+        const borrowModal = $('borrowModal');
+        let borrowTargetId = null;
+
+        function openBorrowModal(bookId) {
+            const b = getBooks().find(x => x.id === bookId);
+            if (!b) {
+                showToast('Book not found', '#e74c3c');
+                return;
+            }
+            borrowTargetId = bookId;
+            $('modalStudent').textContent = session.name;
+            $('modalBook').textContent = b.title;
+            $('modalDate').textContent = (new Date()).toLocaleString();
+            borrowModal.style.display = 'flex';
+        }
+
+        function closeBorrowModal() {
+            borrowModal.style.display = 'none';
+            borrowTargetId = null;
+        }
+
+        $('confirmBorrowBtn').addEventListener('click', () => {
+            if (!borrowTargetId) return;
+            const requests = getRequests();
+            requests.push({
+                id: Date.now(),
+                bookId: borrowTargetId,
+                user: session.name,
+                date: new Date().toISOString(),
+                status: 'pending'
+            });
+            saveRequests(requests);
+            showToast('Borrow request submitted.');
+            closeBorrowModal();
+            renderBooks();
+        });
+
+        // ====== Requests approval/deny (librarian) ======
+        const dashboardModal = $('dashboardModal');
+
+        function openDashboard() {
+            if (!isLibrarian) {
+                showToast('Only librarians can open the dashboard', '#e74c3c');
+                return;
+            }
+            renderRequestsList();
+            renderArchiveList();
+            dashboardModal.style.display = 'flex';
+        }
+
+        function closeDashboard() {
+            dashboardModal.style.display = 'none';
+        }
+
+        function renderRequestsList() {
+            const listEl = $('requestsList');
+            const requests = getRequests().slice();
+            const books = getBooks();
+            const pending = requests.filter(r => r.status === 'pending').sort((a, b) => b.id - a.id);
+            if (pending.length === 0) {
+                listEl.innerHTML = '<div class="small">No pending requests</div>';
+                return;
+            }
+            listEl.innerHTML = '';
+            pending.forEach(r => {
+                const b = books.find(x => x.id === r.bookId) || {
+                    title: '(missing)'
+                };
+                const item = document.createElement('div');
+                item.className = 'request-item';
+                item.style.padding = '8px 0';
+                item.innerHTML = `<div><b>${escapeHtml(r.user)}</b> requested <b>${escapeHtml(b.title)}</b> — ${new Date(r.date).toLocaleString()}</div>`;
+                const approve = document.createElement('button');
+                approve.className = 'btn green';
+                approve.textContent = 'Approve';
+                approve.style.marginRight = '6px';
+                approve.addEventListener('click', () => approveRequest(r.id));
+                const deny = document.createElement('button');
+                deny.className = 'btn red';
+                deny.textContent = 'Deny';
+                deny.addEventListener('click', () => denyRequest(r.id));
+                item.appendChild(approve);
+                item.appendChild(deny);
+                listEl.appendChild(item);
+            });
+        }
+
+        function approveRequest(requestId) {
+            const requests = getRequests();
+            const idx = requests.findIndex(r => r.id === requestId);
+            if (idx === -1) return;
+            const r = requests[idx];
+            const books = getBooks();
+            const bIdx = books.findIndex(bb => bb.id === r.bookId);
+            if (bIdx === -1) {
+                showToast('Book not found', '#e74c3c');
+                return;
+            }
+            if ((books[bIdx].copies || 0) <= 0) {
+                showToast('No copies available', '#e74c3c');
+                return;
+            }
+            // decrement copy
+            books[bIdx].copies -= 1;
+            saveBooks(books);
+            updateCopiesDisplay(books[bIdx].id, books[bIdx].copies);
+
+            // update request
+            requests[idx].status = 'approved';
+            saveRequests(requests);
+
+            // add to history (active borrow)
+            const history = getHistory();
+            const histRec = {
+                id: Date.now(),
+                bookId: r.bookId,
+                user: r.user,
+                dateBorrowed: r.date,
+                status: 'borrowed'
+            };
+            history.push(histRec);
+            saveHistory(history);
+
+            // create contract
+            const contracts = getContracts();
+            const contractRec = {
+                id: Date.now() + Math.floor(Math.random() * 999),
+                bookId: r.bookId,
+                resourceName: books[bIdx].title,
+                holderName: r.user,
+                contractDate: r.date,
+                expirationDate: new Date(Date.now() + 14 * 24 * 3600 * 1000).toISOString(),
+                quantity: 1,
+                status: 'Active'
+            };
+            contracts.push(contractRec);
+            saveContracts(contracts);
+
+            showToast('Request approved. Contract created.');
+            renderRequestsList();
+            renderArchiveList();
+            renderBooks();
+            renderHistoryForUser();
+        }
+
+        function denyRequest(requestId) {
+            const requests = getRequests();
+            const idx = requests.findIndex(r => r.id === requestId);
+            if (idx === -1) return;
+            requests[idx].status = 'denied';
+            saveRequests(requests);
+            showToast('Request denied', 'orange');
+            renderRequestsList();
+        }
+
+        // ====== Return flow (book returned by user; librarian can mark terminated too) ======
+        function returnBook(historyId) {
+            let history = getHistory();
+            const hIdx = history.findIndex(h => h.id === historyId);
+            if (hIdx === -1) return;
+            const rec = history[hIdx];
+            if (rec.user !== session.name && !isLibrarian) {
+                showToast('You can only return your own borrowed books', '#e74c3c');
+                return;
+            }
+            // mark returned and archive
+            const returnedDate = new Date().toISOString();
+
+            // Move to archive entry
+            const arch = getArchive();
+            const books = getBooks();
+            const book = books.find(b => b.id === rec.bookId);
+            arch.push({
+                id: rec.id,
+                bookId: rec.bookId,
+                user: rec.user,
+                bookTitle: book ? book.title : '(unknown)',
+                dateBorrowed: rec.dateBorrowed,
+                dateReturned: returnedDate
+            });
+            saveArchive(arch);
+
+            // remove from history list
+            history = history.filter(h => h.id !== historyId);
+            saveHistory(history);
+
+            // increment copies
+            if (book) {
+                book.copies = (book.copies || 0) + 1;
+                saveBooks(books);
+                updateCopiesDisplay(book.id, book.copies);
+            }
+
+            // update related contract(s) (set Completed)
+            let contracts = getContracts();
+            contracts = contracts.map(c => {
+                if (c.bookId === rec.bookId && c.holderName === rec.user && c.status === 'Active') {
+                    c.status = 'Completed';
+                    c.actualReturnDate = returnedDate;
+                }
+                return c;
+            });
+            saveContracts(contracts);
+
+            showToast('Book returned. Thank you!');
+            renderBooks();
+            renderHistoryForUser();
+            if (isLibrarian) renderArchiveList();
+        }
+
+        // ====== History view (user) ======
+        const historyModalEl = $('historyModal');
+
+        function openHistory() {
+            renderHistoryForUser();
+            historyModalEl.style.display = 'flex';
+        }
+
+        function closeHistory() {
+            historyModalEl.style.display = 'none';
+        }
+
+        function renderHistoryForUser() {
+            const list = $('historyList');
+            list.innerHTML = '';
+            const history = getHistory().slice().sort((a, b) => b.id - a.id);
+            const books = getBooks();
+            const mine = history.filter(h => h.user === session.name);
+            if (mine.length === 0) {
+                list.innerHTML = '<div class="small">You have not borrowed any books yet.</div>';
+                return;
+            }
+            mine.forEach(h => {
+                const b = books.find(x => x.id === h.bookId) || {
+                    title: '(unknown)'
+                };
+
+                const statusText = getBorrowStatus(h.dateBorrowed);
+                let statusColor = '#3498db';
+
+                if (statusText.includes('Overdue')) statusColor = '#e74c3c';
+                if (statusText.includes('Early')) statusColor = '#2ecc71';
+
+                const div = document.createElement('div');
+                div.style.borderBottom = '1px solid #eee';
+                div.style.padding = '8px 0';
+
+                div.innerHTML = `
+        <div><b>${escapeHtml(b.title)}</b></div>
+        <div class="small">Borrowed: ${new Date(h.dateBorrowed).toLocaleDateString()}</div>
+        <div class="small">
+            Status: <span style="color:${statusColor}; font-weight:600">${statusText}</span>
+        </div>
+    `;
+
+                if (statusText !== "Returned Early" && h.status === 'borrowed') {
+                    const ret = document.createElement('button');
+                    ret.className = 'btn red';
+                    ret.textContent = 'Return';
+                    ret.style.marginTop = '6px';
+                    ret.addEventListener('click', () => {
+                        if (confirm('Mark as returned?')) returnBook(h.id);
+                    });
+                    div.appendChild(ret);
+                }
+
+                list.appendChild(div);
+            });
+
+        }
+
+        // ====== Edit Book Modal (librarian) ======
+        const editModal = $('editModal');
+        const editName = $('edit_name');
+        const editCategory = $('edit_category');
+        const editQuantity = $('edit_quantity');
+        const editISBN = $('edit_isbn');
+        let editingBookId = null;
+
+        function openEditModal(bookId) {
+            if (!isLibrarian) {
+                showToast('Only librarians can edit records', '#e74c3c');
+                return;
+            }
+            const b = getBooks().find(x => x.id === bookId);
+            if (!b) {
+                showToast('Book not found', '#e74c3c');
+                return;
+            }
+            editingBookId = bookId;
+            editName.value = b.title || '';
+            populateEditCategory();
+            editCategory.value = b.category || getCategories()[0] || '';
+            editQuantity.value = b.copies || 0;
+            editISBN.value = b.isbn || '';
+            editModal.style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            editingBookId = null;
+            editModal.style.display = 'none';
+        }
+
+        $('updateRecordBtn').addEventListener('click', () => {
+            if (!isLibrarian) return showToast('Only librarians can update records', '#e74c3c');
+            if (!editingBookId) return;
+            const books = getBooks();
+            const idx = books.findIndex(b => b.id === editingBookId);
+            if (idx === -1) return;
+            books[idx].title = (editName.value || books[idx].title).trim();
+            books[idx].category = editCategory.value || '';
+            books[idx].copies = Math.max(0, parseInt(editQuantity.value) || 0);
+            books[idx].isbn = (editISBN.value || '').trim();
+            saveBooks(books);
+            showToast('Record updated');
+            populateCategorySelect();
+            renderBooks();
+            closeEditModal();
+        });
+
+        $('deleteRecordBtn').addEventListener('click', () => {
+            if (!isLibrarian) return showToast('Only librarians can delete records', '#e74c3c');
+            if (!editingBookId) return;
+            if (!confirm('Delete this record?')) return;
+            let books = getBooks();
+            books = books.filter(b => b.id !== editingBookId);
+            saveBooks(books);
+            showToast('Record deleted', '#e74c3c');
+            renderBooks();
+            closeEditModal();
+        });
+
+        // close edit modal if backdrop clicked
+        $('editModal').addEventListener('click', (e) => {
+            if (e.target === $('editModal')) closeEditModal();
+        });
+
+        // ====== Contract history (3-dot) ======
+        const contractModal = $('contractModal');
+
+        function openContractHistory(bookId) {
+            contractModal.style.display = 'flex';
+            renderContractHistoryForBook(bookId);
+        }
+
+        function closeContractModal() {
+            contractModal.style.display = 'none';
+        }
+
+        function renderContractHistoryForBook(bookId) {
+            const list = $('contractList');
+            const contracts = getContracts().filter(c => c.bookId === bookId).slice().sort((a, b) => b.id - a.id);
+            if (contracts.length === 0) {
+                list.innerHTML = '<div class="small">No contract history for this book.</div>';
+                return;
+            }
+            list.innerHTML = '';
+            contracts.forEach(c => {
+                const div = document.createElement('div');
+                div.style.borderBottom = '1px solid #eee';
+                div.style.padding = '8px 0';
+                div.innerHTML = `<div><b>${escapeHtml(c.resourceName)}</b> — Holder: ${escapeHtml(c.holderName)}</div>
+                <div class='small'>Contract Date: ${new Date(c.contractDate).toLocaleString()} | Expiration: ${new Date(c.expirationDate).toLocaleString()} | Status: ${escapeHtml(c.status)} | Qty: ${c.quantity}</div>`;
+                list.appendChild(div);
+            });
+        }
+
+        // ====== Active Contracts view (librarian) ======
+        const activeContractsModal = $('activeContractsModal');
+
+        function openActiveContracts() {
+            if (!isLibrarian) {
+                showToast('Only librarians can view active contracts', '#e74c3c');
+                return;
+            }
+            activeContractsModal.style.display = 'flex';
+            renderActiveContractsTable();
+        }
+
+        function closeActiveContracts() {
+            activeContractsModal.style.display = 'none';
+        }
+
+        function renderActiveContractsTable(filter = '') {
+            const container = $('activeContractsContainer');
+            const contracts = getContracts().filter(c => c.status === 'Active');
+            const f = (filter || '').toLowerCase().trim();
+            const filtered = contracts.filter(c => {
+                if (!f) return true;
+                return (c.resourceName || '').toLowerCase().includes(f) || (c.holderName || '').toLowerCase().includes(f);
+            });
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="small">No active contracts</div>';
+                return;
+            }
+
+            let html = '<table class="contract-table"><thead><tr><th><input id="selectAllActive" type="checkbox"></th><th>Resource Name</th><th>Holder Name</th><th>Contract Date</th><th>Expiration Date</th><th>Quantity</th><th>Action</th></tr></thead><tbody>';
+            filtered.forEach(c => {
+                html += `<tr data-id="${c.id}">
+                <td><input class="selActive" type="checkbox" data-id="${c.id}"></td>
+                <td>${escapeHtml(c.resourceName)}</td>
+                <td>${escapeHtml(c.holderName)}</td>
+                <td>${new Date(c.contractDate).toLocaleDateString()}</td>
+                <td>${new Date(c.expirationDate).toLocaleDateString()}</td>
+                <td>${c.quantity}</td>
+                <td><button class="btn gray markSingle" data-id="${c.id}">Mark Terminated</button></td>
+            </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+            // wire selectAll
+            const selAll = $('selectAllActive');
+            if (selAll) {
+                selAll.addEventListener('change', (e) => {
+                    document.querySelectorAll('.selActive').forEach(ch => ch.checked = selAll.checked);
+                });
+            }
+            // wire single mark
+            container.querySelectorAll('.markSingle').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = Number(btn.getAttribute('data-id'));
+                    if (confirm('Mark this contract as terminated?')) markContractTerminated(id);
+                });
+            });
+        }
+
+        // search input in active modal
+        document.addEventListener('click', (e) => {
+            // delegated for markSelectedTerminated & activeSearch
+            if (e.target && e.target.id === 'markSelectedTerminated') {
+                if (!isLibrarian) return showToast('Only librarians can perform this action', '#e74c3c');
+                const checked = Array.from(document.querySelectorAll('.selActive')).filter(x => x.checked).map(x => Number(x.getAttribute('data-id')));
+                if (checked.length === 0) {
+                    showToast('No contracts selected', 'orange');
+                    return;
+                }
+                if (!confirm(`Mark ${checked.length} contract(s) as terminated?`)) return;
+                checked.forEach(id => markContractTerminated(id));
+                renderActiveContractsTable($('activeSearch').value || '');
+            }
+        });
+        // live search in active contracts modal
+        document.addEventListener('input', (e) => {
+            if (e.target && e.target.id === 'activeSearch') {
+                renderActiveContractsTable(e.target.value);
+            }
+        });
+
+        // mark contract terminated -> update contract, increase book copies, archive history
+        function markContractTerminated(contractId) {
+            renderTerminatedContracts();
+
+            if (!isLibrarian) return showToast('Only librarians can perform this action', '#e74c3c');
+            const contracts = getContracts();
+            const idx = contracts.findIndex(c => c.id === contractId);
+            if (idx === -1) return;
+            // set status
+            contracts[idx].status = 'Terminated';
+            contracts[idx].actualReturnDate = new Date().toISOString();
+            saveContracts(contracts);
+
+            // increase copies of the book
+            const books = getBooks();
+            const bIdx = books.findIndex(b => b.id === contracts[idx].bookId);
+            if (bIdx !== -1) {
+                books[bIdx].copies = (books[bIdx].copies || 0) + (contracts[idx].quantity || 1);
+                saveBooks(books);
+            }
+
+            // add to archive as returned
+            const arch = getArchive();
+            arch.push({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                bookId: contracts[idx].bookId,
+                user: contracts[idx].holderName,
+                bookTitle: contracts[idx].resourceName,
+                dateBorrowed: contracts[idx].contractDate,
+                dateReturned: contracts[idx].actualReturnDate
+            });
+            saveArchive(arch);
+
+            showToast('Contract marked terminated');
+            renderActiveContractsTable($('activeSearch') ? $('activeSearch').value : '');
+            renderBooks();
+            renderArchiveList();
+        }
+
+        // ====== Terminated Contracts modal (separate modal already present in markup) ======
+        const terminatedModal = $('terminatedContractsModal');
+
+        function openTerminatedContracts() {
+            terminatedModal.style.display = 'flex';
+            renderTerminatedContracts();
+        }
+
+        function closeTerminatedContracts() {
+            terminatedModal.style.display = 'none';
+        }
+
+        function renderTerminatedContracts() {
+            const container = document.getElementById('terminatedContractsContainer');
+            if (!container) return;
+
+            const searchInput = document.getElementById('terminatedSearch');
+            const dateInput = document.getElementById('terminatedDate');
+
+            const search = searchInput ? searchInput.value.toLowerCase() : '';
+            const dateFilter = dateInput ? dateInput.value : '';
+
+
+            const contracts = getContracts()
+                .filter(c => c.status === 'Terminated' || c.status === 'Completed');
+
+            if (contracts.length === 0) {
+                container.innerHTML = '<div class="small">No terminated contracts found.</div>';
+                return;
+            }
+
+            const filtered = contracts.filter(c => {
+                const titleMatch =
+                    (c.resourceName || '').toLowerCase().includes(search) ||
+                    (c.holderName || '').toLowerCase().includes(search);
+
+                if (search && !titleMatch) return false;
+
+                if (dateFilter) {
+                    const rDate = c.actualReturnDate || c.expirationDate;
+                    if (!rDate) return false;
+                    if (new Date(rDate).toISOString().slice(0, 10) !== dateFilter) return false;
+                }
+
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="small">No matching terminated contracts.</div>';
+                return;
+            }
+
+            let html = `
+        <table class="contract-table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Borrower</th>
+                    <th>Contract Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+            filtered.forEach(c => {
+                const returnDate = c.actualReturnDate || c.expirationDate || '';
+
+                html += `
+            <tr>
+                <td>${escapeHtml(c.resourceName || '(unknown)')}</td>
+                <td>${escapeHtml(c.holderName || '(unknown)')}</td>
+                <td>${c.contractDate ? new Date(c.contractDate).toLocaleDateString() : '-'}</td>
+                <td>${returnDate ? new Date(returnDate).toLocaleDateString() : '-'}</td>
+                <td><strong>${escapeHtml(c.status)}</strong></td>
+            </tr>
+        `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+
+
+
+            // wire delete buttons
+            container.querySelectorAll('.delTerm').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (!isLibrarian) return showToast('Only librarians can delete terminated records', '#e74c3c');
+                    const id = btn.getAttribute('data-id');
+                    if (!confirm('Delete this terminated/archived record?')) return;
+                    if (id.startsWith('a-')) {
+                        // archive record
+                        const aid = Number(id.slice(2));
+                        let arch = getArchive();
+                        arch = arch.filter(x => x.id !== aid);
+                        saveArchive(arch);
+                        showToast('Archive record deleted');
+                    } else if (id.startsWith('c-')) {
+                        const cid = Number(id.slice(2));
+                        let contracts = getContracts();
+                        contracts = contracts.filter(x => x.id !== cid);
+                        saveContracts(contracts);
+                        showToast('Contract record deleted');
+                    }
+                    renderTerminatedContracts();
+                    renderArchiveList();
+                });
+            });
+        }
+
+        // wire terminated modal controls
+        if ($('terminatedSearch')) $('terminatedSearch').addEventListener('input', renderTerminatedContracts);
+        if ($('terminatedDate')) $('terminatedDate').addEventListener('change', renderTerminatedContracts);
+
+        // ====== Active/Terminated UI wiring (buttons in header area) ======
+        if ($('viewActiveContracts')) $('viewActiveContracts').addEventListener('click', openActiveContracts);
+        // show terminated modal via the same button on top or some place; create a link (for librarian)
+        // we'll add a quick command: when in dashboard, show link to terminated modal. Also allow opening via console or call:
+        // but to be convenient, add a keyboard shortcut (L for librarians) - optional.
+        // For UI, add in dashboard modal (no DOM change here to markup) - add a button to open terminated modal:
+        // We'll wire its click when dashboard modal opens.
+
+        // ====== Category Manager ======
+        const categoryModal = $('categoryModal');
+
+        function openCategoryManager() {
+            if (!isLibrarian) {
+                showToast('Only librarians can manage categories', '#e74c3c');
+                return;
+            }
+            renderCategoriesList();
+            categoryModal.style.display = 'flex';
+        }
+
+        function closeCategoryManager() {
+            categoryModal.style.display = 'none';
+        }
+
+        function renderCategoriesList() {
+            const list = $('categoriesList');
+            const cats = getCategories();
+            list.innerHTML = '';
+            if (!cats || cats.length === 0) {
+                list.innerHTML = '<div class="small">No categories defined.</div>';
+                return;
+            }
+            cats.forEach(c => {
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.justifyContent = 'space-between';
+                row.style.alignItems = 'center';
+                row.style.padding = '6px 0';
+                row.innerHTML = `<div>${escapeHtml(c)}</div>`;
+                const del = document.createElement('button');
+                del.className = 'btn red';
+                del.textContent = 'Delete';
+                del.addEventListener('click', () => {
+                    if (!confirm('Delete category "' + c + '"? This will unset category for books in that category.')) return;
+                    let nc = getCategories().filter(x => x !== c);
+                    saveCategories(nc);
+                    let books = getBooks().map(b => {
+                        if (b.category === c) b.category = '';
+                        return b;
+                    });
+                    saveBooks(books);
+                    renderCategoriesList();
+                    populateCategorySelect();
+                    renderBooks();
+                    showToast('Category deleted', 'orange');
+                });
+                row.appendChild(del);
+                list.appendChild(row);
+            });
+        }
+
+        // wire category manager triggers
+        if ($('manageCategories')) $('manageCategories').addEventListener('click', openCategoryManager);
+        if ($('openCategoryManager')) $('openCategoryManager').addEventListener('click', openCategoryManager);
+        if ($('closeCatBtn')) $('closeCatBtn').addEventListener('click', closeCategoryManager);
+        if ($('addCategoryBtn')) $('addCategoryBtn').addEventListener('click', () => {
+            if (!isLibrarian) return showToast('Only librarians can add categories', '#e74c3c');
+            const val = ($('newCategoryInput').value || '').trim();
+            if (!val) {
+                showToast('Category required', 'orange');
+                return;
+            }
+            let cats = getCategories();
+            if (cats.includes(val)) {
+                showToast('Category already exists', 'orange');
+                return;
+            }
+            cats.push(val);
+            saveCategories(cats);
+            $('newCategoryInput').value = '';
+            renderCategoriesList();
+            populateCategorySelect();
+            populateEditCategory();
+            showToast('Category added');
+        });
+
+        // ====== Add Book ======
+        function openAddBook() {
+            if (!isLibrarian) {
+                showToast('Only librarians can add books', '#e74c3c');
+                return;
+            }
+            populateNewBookCategory();
+            $('addBookModal').style.display = 'flex';
+        }
+
+        function closeAddBook() {
+            $('addBookModal').style.display = 'none';
+        }
+
+        if ($('addBookBtn')) $('addBookBtn').addEventListener('click', openAddBook);
+
+        if ($('saveNewBookBtn')) $('saveNewBookBtn').addEventListener('click', () => {
+            if (!isLibrarian) return showToast('Only librarians can add books', '#e74c3c');
+            const name = ($('newBookName').value || '').trim();
+            const category = $('newBookCategory').value || '';
+            const qty = Math.max(0, parseInt($('newBookQty').value || '0'));
+            const isbn = ($('newBookISBN').value || '').trim();
+            if (!name) {
+                showToast('Book name required', 'orange');
+                return;
+            }
+            if (!category) {
+                showToast('Category required', 'orange');
+                return;
+            }
+            const books = getBooks();
+            const id = Date.now() + Math.floor(Math.random() * 1000);
+            books.push({
+                id,
+                title: name,
+                copies: qty,
+                category,
+                img: 'book1.png',
+                isbn
+            });
+            saveBooks(books);
+            showToast('Book added successfully');
+            closeAddBook();
+            populateCategorySelect();
+            renderBooks();
+        });
+
+        // close add book on backdrop
+        $('addBookModal').addEventListener('click', (e) => {
+            if (e.target === $('addBookModal')) closeAddBook();
+        });
+
+        // ====== Archive rendering in dashboard ======
+        function renderArchiveList() {
+            const a = getArchive().slice().sort((x, y) => y.id - x.id);
+            const el = $('archList');
+            if (!el) return;
+            if (a.length === 0) {
+                el.innerHTML = '<div class="small">No archived records.</div>';
+                return;
+            }
+            el.innerHTML = a.map(x => `<div style="border-bottom:1px solid #ddd; padding:6px 0;"><div><b>${escapeHtml(x.bookTitle||'(unknown title)')}</b></div><div class="small">User: ${escapeHtml(x.user||'')}</div><div class="small">Borrowed: ${new Date(x.dateBorrowed).toLocaleString()}</div><div class="small">Returned: ${new Date(x.dateReturned).toLocaleString()}</div></div>`).join('');
+        }
+        if ($('clearArchiveBtn')) $('clearArchiveBtn').addEventListener('click', () => {
+            if (!isLibrarian) return showToast('Only librarians can clear the archive', '#e74c3c');
+            if (!confirm('Clear entire archive?')) return;
+            saveArchive([]);
+            renderArchiveList();
+            showToast('Archive cleared', 'orange');
+        });
+
+        // ====== Move item to archive (utility) ======
+        function addToArchive(historyId) {
+            const history = getHistory();
+            const idx = history.findIndex(h => h.id === historyId);
+            if (idx === -1) return;
+            const rec = history[idx];
+            let arch = getArchive();
+            const books = getBooks();
+            const b = books.find(x => x.id === rec.bookId);
+            arch.push({
+                id: rec.id,
+                bookId: rec.bookId,
+                user: rec.user,
+                bookTitle: b ? b.title : '(unknown)',
+                dateBorrowed: rec.dateBorrowed,
+                dateReturned: new Date().toISOString()
+            });
+            saveArchive(arch);
+            const updated = history.filter(h => h.id !== historyId);
+            saveHistory(updated);
+            showToast('Moved to archive');
+            renderHistoryForUser();
+            if (isLibrarian) renderArchiveList();
+        }
+
+        // ====== Terminate archive record (delete) - used by older code; keep for compatibility ======
+        function terminateArchive(id) {
+            if (!isLibrarian) return showToast('Only librarians can delete archive records', '#e74c3c');
+            let arch = getArchive();
+            arch = arch.filter(x => x.id !== id);
+            saveArchive(arch);
+            renderArchiveList();
+            showToast('Archive record removed', 'orange');
+        }
+
+        // ====== Contract listing, terminated listings handled above ======
+
+        // ====== Modal backdrop close wiring (unified) ======
+        document.querySelectorAll('.modal-backdrop').forEach(md => {
+            md.addEventListener('click', (e) => {
+                if (e.target === md) md.style.display = 'none';
+            });
+        });
+
+        // ====== Toasts ======
+        const toastEl = document.createElement('div');
+        toastEl.id = 'toast';
+        toastEl.style = 'position:fixed; bottom:20px; right:20px; background:#4CAF50; color:white; padding:12px 18px; border-radius:8px; font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.2); opacity:0; transition:opacity .4s ease; z-index:3000;';
+        document.body.appendChild(toastEl);
+
+        function showToast(message, color = "#4CAF50") {
+            const t = document.getElementById("toast");
+            t.textContent = message;
+            t.style.background = color;
+            t.style.opacity = 1;
+            clearTimeout(t._timeout);
+            t._timeout = setTimeout(() => t.style.opacity = 0, 2500);
+        }
+        // ensure window.alert doesn't break UI
+        window.alert = function(msg) {
+            showToast(msg, "#4CAF50");
+        };
+
+        // ====== Terminated Contracts modal defined in page footer; wire opening in dashboard (easy access) ======
+        // Add a "View Terminated Contracts" button inside the dashboard modal programmatically for librarians
+        function ensureDashboardButtons() {
+            const dashModal = document.getElementById('dashboardModal');
+            if (!dashModal || dashModal._fixedBtn) return;
+
+            const modalContent = dashModal.querySelector('.modal');
+            if (!modalContent) return;
+
+            const btn = document.createElement('button');
+            btn.className = 'btn gray librarian-only';
+            btn.textContent = 'View Terminated Contracts';
+            btn.style.marginTop = '10px';
+
+            btn.addEventListener('click', () => {
+                closeDashboard();
+                openTerminatedContracts();
+            });
+
+            modalContent.appendChild(btn);
+            dashModal._fixedBtn = true;
+
+            function openTerminatedContracts() {
+                document.getElementById('terminatedContractsModal').style.display = 'flex';
+                renderTerminatedContracts(); // 🔥 REQUIRED
+            }
+
+        }
+
+        function closeTerminatedContracts() {
+            const modal = document.getElementById('terminatedContractsModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+
+
+        // call once
+        ensureDashboardButtons();
+
+        // ====== Renderers init ======
+        populateCategorySelect();
+        populateEditCategory();
+        renderBooks();
+
+        // Fix: Librarian Dashboard button not opening modal
+        if (document.getElementById("viewDashboard")) {
+            document.getElementById("viewDashboard").addEventListener("click", openDashboard);
+        }
+
+        // Fix: Borrowed History button not opening modal
+        if (document.getElementById("viewHistory")) {
+            document.getElementById("viewHistory").addEventListener("click", openHistory);
+        }
+
+
+        // expose some functions globally to be used by inline onclicks or console if needed
+        window.openCategoryManager = openCategoryManager;
+        window.openEditModal = openEditModal;
+        window.openContractHistory = openContractHistory;
+        window.openActiveContracts = openActiveContracts;
+        window.openTerminatedContracts = openTerminatedContracts;
+        window.openDashboard = openDashboard;
+        window.closeTerminatedContracts = closeTerminatedContracts;
+        window.openHistory = openHistory;
+        window.openAddBook = openAddBook;
+        window.terminateArchive = terminateArchive;
+    </script>
+
+    <!-- Terminated Contracts Modal -->
+    <div id="terminatedContractsModal" class="modal-backdrop">
+        <div class="modal" style="width:90%; max-width:900px;">
+            <h3>Terminated Contracts</h3>
+            <input id="terminatedSearch" placeholder="Search returned books" style="width:60%;padding:8px;margin:10px 0;">
+            <input id="terminatedDate" type="date" style="padding:8px;margin:10px 0;">
+            <div id="terminatedContractsContainer" style="max-height:420px; overflow-y:auto; border:1px solid #ddd; padding:8px; border-radius:6px;">
+            </div>
+
+            <button onclick="closeTerminatedContracts()" class="btn gray">Close</button>
+        </div>
+    </div>
+</body>
+
+</html>

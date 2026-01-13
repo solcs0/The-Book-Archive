@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | The Book Archive</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5deb3;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4b2e05;
+        }
+        
+        .app-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px auto;
+            width: 360px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+        }
+        
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .approve {
+            background: #2e7d32;
+            color: white;
+        }
+        
+        .reject {
+            background: #c62828;
+            color: white;
+        }
+        
+        .empty {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+
+    <script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+        })();
+    </script>
+</head>
+
+<body>
+
+    <h1>Admin Dashboard</h1>
+
+    <div id="app-list"></div>
+
+    <script>
+        const APPLICATIONS_KEY = "therese_librarian_applications";
+        const APPROVED_KEY = "therese_librarians";
+
+        function getApps() {
+            return JSON.parse(localStorage.getItem(APPLICATIONS_KEY) || "[]");
+        }
+
+        function saveApps(list) {
+            localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(list));
+        }
+
+        function getApproved() {
+            return JSON.parse(localStorage.getItem(APPROVED_KEY) || "[]");
+        }
+
+        function saveApproved(list) {
+            localStorage.setItem(APPROVED_KEY, JSON.stringify(list));
+        }
+
+        function renderApps() {
+            const container = document.getElementById("app-list");
+            const apps = getApps();
+
+            container.innerHTML = "";
+
+            if (apps.length === 0) {
+                container.innerHTML = `<p class="empty">No pending applications.</p>`;
+                return;
+            }
+
+            apps.forEach((app, index) => {
+                const card = document.createElement("div");
+                card.className = "app-card";
+
+                card.innerHTML = `
+                    <h3>${app.fullname}</h3>
+                    <p><strong>Username:</strong> ${app.username}</p>
+                    <p><strong>Email:</strong> ${app.email}</p>
+
+                    <button class="btn approve">Approve</button>
+                    <button class="btn reject">Reject</button>
+                `;
+
+                // APPROVE
+                card.querySelector(".approve").addEventListener("click", () => {
+                    const approved = getApproved();
+
+                    approved.push({
+                        username: app.username,
+                        fullname: app.fullname,
+                        email: app.email,
+                        passwordHash: app.passwordHash
+                    });
+
+                    saveApproved(approved);
+
+                    // Remove from pending
+                    apps.splice(index, 1);
+                    saveApps(apps);
+
+                    // Optional: send email
+                    emailjs.send("service_qzkszha", "template_g4z57yd", {
+                        to_email: app.email,
+                        user_name: app.fullname
+                    });
+
+                    renderApps();
+                });
+
+                // REJECT
+                card.querySelector(".reject").addEventListener("click", () => {
+                    apps.splice(index, 1);
+                    saveApps(apps);
+
+                    // Optional: send rejection email
+                    emailjs.send("service_qzkszha", "YOUR_TEMPLATE_REJECTED", {
+                        to_email: app.email,
+                        user_name: app.fullname
+                    });
+
+                    renderApps();
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        renderApps();
+    </script>
+
+</body>
+
+</html>

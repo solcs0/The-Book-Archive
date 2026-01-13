@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Book Archive — Replica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Domine:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('https://i.ibb.co/bmZdcT7/noise-bg.png');
+            /* Replace with actual texture image */
+            background-size: cover;
+            font-family: 'Domine', serif;
+            color: #3b2b20;
+        }
+        
+        .center-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+        
+        .main-board {
+            background: #c9b8a1;
+            padding: 60px 40px;
+            width: 85%;
+            max-width: 1200px;
+            border-radius: 15px;
+            border: 4px solid rgba(120, 80, 50, 0.35);
+            position: relative;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+        /* Tape elements */
+        
+        .tape {
+            width: 140px;
+            height: 40px;
+            background: #e9d7b7;
+            opacity: 0.8;
+            position: absolute;
+            top: -20px;
+            transform: rotate(-4deg);
+        }
+        
+        .tape.right {
+            right: 120px;
+            transform: rotate(6deg);
+        }
+        
+        .tape.left {
+            left: 120px;
+        }
+        
+        .star-left,
+        .star-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 32px;
+            color: #9b7955;
+        }
+        
+        .star-left {
+            left: -25px;
+        }
+        
+        .star-right {
+            right: -25px;
+        }
+        
+        h4 {
+            font-size: 20px;
+            letter-spacing: 4px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            margin-top: 5px;
+            font-size: 15px;
+            opacity: 0.8;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            margin: 25px 0 10px;
+            font-weight: 800;
+        }
+        
+        .powered {
+            font-style: italic;
+            font-size: 18px;
+            opacity: 0.8;
+            margin-bottom: 18px;
+        }
+        
+        .school {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        /* Quote block */
+        
+        .quote-box {
+            width: 85%;
+            max-width: 1200px;
+            background: #f3e5c8;
+            padding: 40px;
+            margin: 0 auto;
+            margin-top: 40px;
+            border-radius: 12px;
+            border: 3px solid rgba(150, 120, 90, 0.4);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+            font-family: 'Domine', serif;
+        }
+        
+        .quote-text {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .quote-author {
+            text-align: right;
+            margin-top: 15px;
+            font-size: 16px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="center-wrapper">
+        <div class="main-board">
+
+            <div class="tape left"></div>
+            <div class="tape right"></div>
+
+            <div class="star-left">✦</div>
+            <div class="star-right">✦</div>
+
+            <h4>ᜐᜓᜈ᜔ᜑᜓᜄ᜔-ᜐᜓᜅ᜔ᜇᜒᜆ᜔</h4>
+            <div class="subtitle">Silid-Aklatan</div>
+
+            <h1>The Book Archive</h1>
+
+            <div class="powered">Powered by THE CRAMinals</div>
+
+            <div class="school">DAYAP NATIONAL INTEGRATED HIGH SCHOOL</div>
+        </div>
+    </div>
+
+    <div class="quote-box">
+        <div class="quote-text">Once you learn to read, you will be forever free.</div>
+        <div class="quote-author">— Frederick Douglass</div>
+    </div>
+
+    <!-- All About Our Library Section -->
+    <section class="about-library-section" style="text-align:center; padding:80px 20px; color:#3a2f1b;">
+        <h2 style="font-family:'Cormorant Garamond', serif; font-size:48px; font-weight:700; margin-bottom:40px; text-shadow:0px 0px 20px rgba(255,255,255,0.3);">All About Our Library</h2>
+
+        <div style="display:flex; justify-content:center; gap:60px; flex-wrap:wrap; margin-top:40px;">
+            <!-- About the Library Card -->
+            <div style="background:#f7f1da; border:4px solid #d4c6a1; padding:40px; width:420px; box-shadow:6px 8px 0px #423729; font-family:'Cormorant Garamond', serif; text-align:left;">
+                <h3 style="font-size:32px; font-weight:700; margin-bottom:10px;">About the Library</h3>
+                <hr style="border-top:2px solid #b29b79; margin:10px 0 20px;">
+                <div class="card">
+                    <p style="font-size:18px; line-height:1.7;">
+                        Welcome to The Book Archive, a sanctuary for readers and learners. Our library houses an extensive collection across 11 distinct genres, providing resources for students at all levels.
+                        <br><br> Books are organized using a color-coded system by genre and category, making it easy to find exactly what you're looking for.
+                    </p>
+                </div>
+                <div style="margin-top:20px; font-size:16px; display:flex; align-items:center; gap:6px;">
+                    📚 <span>Library Information</span>
+                </div>
+            </div>
+
+            <!-- Library Hours Card -->
+            <div style="background:#f7f1da; border:4px solid #d4c6a1; padding:40px; width:420px; box-shadow:6px 8px 0px #423729; font-family:'Cormorant Garamond', serif; text-align:left; position:relative;">
+                <h3 style="font-size:32px; font-weight:700; margin-bottom:10px;">Library Hours</h3>
+                <hr style="border-top:2px solid #b29b79; margin:10px 0 20px;">
+                <div style="background:#fff7c9; padding:25px 30px; font-size:20px; font-weight:600; box-shadow:4px 6px 0px #8a7a5e; text-align:center;">
+                    9:00 AM - 2:00 PM <br>
+                    <span style="font-size:16px; font-weight:400;">Monday - Friday</span>
+                </div>
+                <div style="margin-top:20px; font-size:16px; display:flex; align-items:center; gap:6px;">
+                    🕰️ <span>Opening Hours</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Librarians Section -->
+    <section class="section-card">
+        <div class="inner-card">
+            <h2>👥 Our Librarians</h2>
+            <hr>
+
+            <div class="librarian-head" style="background:#bfa57a; padding:30px; border-radius:12px; box-shadow:0 6px 12px rgba(0,0,0,0.35); margin:35px auto; max-width:1050px; text-align:center; border:3px solid #8a6b3e;">
+                <h3 style="font-size:28px; font-weight:700; color:#3e2a17; margin-bottom:5px;">Head Librarian</h3>
+                <div class="card">
+                    <p style="font-size:22px; color:#3e2a17;">Ma'am Analiza Alburo</p>
+                </div>
+            </div>
+
+            <div class="librarians-grid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:25px; margin:40px auto; max-width:1250px; justify-items:center;">
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Rachel C. Alvarez</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Renz Benitez</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Precious Vega</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Rovelle Sandiola</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Alexandra Castillo</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Christine Baniel</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Sharyvine Leus</div>
+                <div class="lib-card" style="background:#e8dab9; padding:22px; border-radius:10px; border:2px solid #b49a76; width:230px; text-align:center; font-size:18px; box-shadow:0 6px 10px rgba(0,0,0,0.25); font-weight:500;">Ysabella Beatrice</div>
+            </div>
+            <div class="lib-card">Renz Benitez</div>
+            <div class="lib-card">Precious Vega</div>
+            <div class="lib-card">Rovelle Sandiola</div>
+            <div class="lib-card">Alexandra Castillo</div>
+            <div class="lib-card">Christine Baniel</div>
+            <div class="lib-card">Sharyvine Leus</div>
+            <div class="lib-card">Ysabella Beatrice</div>
+        </div>
+
+
+        </div>
+    </section>
+
+    <!-- Library Usage & Borrowing Policies Section -->
+    <section class="section-card">
+        <div class="inner-card" style="display:flex; gap:40px; justify-content:center; flex-wrap:wrap;">
+
+            <!-- Library Usage Card -->
+            <div class="usage-card" style="background:#f6f0dc; border:3px solid #c9b896; padding:35px; width:420px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-radius:4px;">
+                <h2 style="display:flex; align-items:center; gap:10px; font-size:30px;">
+                    📊 Library Usage
+                </h2>
+                <hr style="margin:15px 0;">
+
+                <div style="background:#fff5a8; padding:25px; border-radius:6px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-left:10px solid #f3a12f;">
+                    <h3>Seating Capacity</h3>
+                    <div class="card">
+                        <p><strong>Normal Day:</strong><br>15-20 students</p>
+                    </div>
+                    <div class="card">
+                        <p><strong>During Programs:</strong><br>Approximately 12 students</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p style="margin-top:25px; font-size:14px;">📊 Seating Capacity</p>
+                </div>
+            </div>
+
+            <!-- Borrowing Policies Card -->
+            <div class="policies-card" style="background:#f6f0dc; border:3px solid #c9b896; padding:35px; width:420px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-radius:4px;">
+                <h2 style="display:flex; align-items:center; gap:10px; font-size:30px;">
+                    📋 Book Borrowing Policies
+                </h2>
+                <hr style="margin:15px 0;">
+
+                <div style="background:#fff5a8; padding:25px; border-radius:6px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-left:10px solid #f3a12f; margin-bottom:20px;">
+                    <h3>Borrowing Duration</h3>
+                    <div class="card">
+                        <p>Books may be borrowed as long as needed, provided students adhere to all library rules and regulations.</p>
+                    </div>
+                </div>
+
+                <div style="background:#ffcfb8; padding:25px; border-radius:6px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-left:10px solid #e77c55;">
+                    <h3>Lost or Damaged Books</h3>
+                    <div class="card">
+                        <p>Students are required to replace any lost or damaged books with a new copy of the same title.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p style="margin-top:25px; font-size:14px;">📄 Rules & Policies</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- New Section: Library Services / Guidelines / Collection Overview -->
+    <section class="three-column-section" style="display:flex; justify-content:center; gap:40px; margin-top:40px;">
+        <div class="policies-card" style="background:#f6f0dc; border:3px solid #c9b896; padding:35px; width:420px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-radius:4px;">
+            <h2><span class="icon">📚</span> Library Services</h2>
+            <div class="note-card">
+                <div class="card">
+                    <p>Book Lending & Return</p>
+                </div>
+                <div class="card">
+                    <p>Reading Area Access</p>
+                </div>
+                <div class="card">
+                    <p>Research Assistance</p>
+                </div>
+                <div class="card">
+                    <p>Digital Catalog Search</p>
+                </div>
+                <div class="card">
+                    <p>Study Group Spaces</p>
+                </div>
+                <div class="card">
+                    <p>Academic Resource Guidance</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="policies-card" style="background:#f6f0dc; border:3px solid #c9b896; padding:35px; width:420px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-radius:4px;">
+            <h2><span class="icon">📜</span> Library Guidelines</h2>
+            <div class="note-card">
+                <div class="card">
+                    <p>Maintain silence in reading areas</p>
+                </div>
+                <div class="card">
+                    <p>Handle books with care</p>
+                </div>
+                <div class="card">
+                    <p>No food or drinks inside</p>
+                </div>
+                <div class="card">
+                    <p>Return books on time</p>
+                </div>
+                <div class="card">
+                    <p>Respect library property</p>
+                </div>
+                <div class="card">
+                    <p>Follow librarian instructions</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="policies-card" style="background:#f6f0dc; border:3px solid #c9b896; padding:35px; width:420px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-radius:4px;">
+            <h2><span class="icon">📘</span> Collection Overview</h2>
+            <div class="card">
+                <p>Our library boasts a diverse and growing collection that serves the educational needs of all students.</p>
+            </div>
+            <div class="note-card">
+                <div class="card">
+                    <p><strong>Collection Highlights:</strong></p>
+                </div>
+                <div class="card">
+                    <p>Extensive Fiction & Non-Fiction titles</p>
+                </div>
+                <div class="card">
+                    <p>Educational magazines and periodicals</p>
+                </div>
+                <div class="card">
+                    <p>Reference materials and dictionaries</p>
+                </div>
+                <div class="card">
+                    <p>Age-appropriate reading levels</p>
+                </div>
+                <div class="card">
+                    <p>Regularly updated new releases</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section (Single Column Center) -->
+    <section style="display:flex; justify-content:center; margin-top:40px;">
+        <div class="policies-card" style="background:#f6f0dc; border:3px solid #c9b896; padding:35px; width:420px; box-shadow:0 4px 8px rgba(0,0,0,0.25); border-radius:4px;">
+            <h2><span class="icon">📖</span> Library Programs</h2>
+            <div class="card">
+                <p>The library hosts various programs throughout the year to promote literacy and a love of reading.</p>
+            </div>
+
+            <div class="note-card">
+                <div class="card">
+                    <p><strong>Activities Include:</strong></p>
+                </div>
+                <div class="card">
+                    <p>Book fairs</p>
+                </div>
+                <div class="card">
+                    <p>Reading challenges</p>
+                </div>
+                <div class="card">
+                    <p>Storytelling sessions</p>
+                </div>
+                <div class="card">
+                    <p>Literary competitions</p>
+                </div>
+                <div class="card">
+                    <p>Workshops for students</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

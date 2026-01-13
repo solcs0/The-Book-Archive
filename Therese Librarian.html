@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Librarian | The Book Archive</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto&display=swap');
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('Final Background.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: 'Roboto', sans-serif;
+            color: #3b2f2f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .logo {
+            position: absolute;
+            width: 200px;
+            top: 20px;
+        }
+        
+        .logo.left {
+            left: 20px;
+        }
+        
+        .logo.right {
+            right: 20px;
+        }
+        
+        header {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 36px;
+            color: #222;
+            margin-bottom: 18px;
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.92);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            width: 340px;
+            text-align: center;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4b2e05;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        
+        button:hover {
+            background: #6a4422;
+        }
+        
+        .msg {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .back-main {
+            display: block;
+            margin-top: 14px;
+            font-size: 15px;
+            color: #4b2e05;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-main:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img src="left.png" class="logo left">
+    <img src="right.png" class="logo right">
+
+    <header>📖 Librarian Portal</header>
+
+    <div class="card">
+
+        <a href="index.html" class="back-main">← Back to Main Menu</a>
+
+        <form id="loginForm">
+            <input id="username" type="text" placeholder="Librarian Username" required />
+            <input id="password" type="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+
+        <div id="login-msg" class="msg"></div>
+    </div>
+
+    <script>
+        const FIXED_USERNAME = "The Book Archive Library";
+        const FIXED_PASSWORD = "ANALYTICCRAMINALS51492526";
+
+        const loginForm = document.getElementById("loginForm");
+        const loginMsg = document.getElementById("login-msg");
+
+        loginForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (username === FIXED_USERNAME && password === FIXED_PASSWORD) {
+                loginMsg.style.color = "green";
+                loginMsg.textContent = "Login successful. Welcome Librarian!";
+
+                localStorage.setItem("logged_in_user", JSON.stringify({
+                    role: "librarian",
+                    name: FIXED_USERNAME
+                }));
+
+                setTimeout(() => {
+                    window.location.href = "Category Test (Books).html";
+                }, 800);
+
+            } else {
+                loginMsg.style.color = "red";
+                loginMsg.textContent = "Invalid username or password.";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

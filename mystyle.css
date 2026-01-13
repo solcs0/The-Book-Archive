@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto&display=swap');
+body {
+    margin: 0;
+    padding: 0;
+    background: #f5deb3;
+    background-image: url('Final Background.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    color: #3b2f2f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    width: 200px;
+}
+
+.logo.left {
+    top: 20px;
+    left: 20px;
+}
+
+.logo.right {
+    top: 20px;
+    right: 20px;
+}
+
+h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 70px;
+    text-align: center;
+    letter-spacing: 4px;
+    margin: 0;
+    color: #4b2e05;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+p {
+    font-size: 18px;
+    margin: 10px 0 40px 0;
+}
+
+.button-container {
+    display: flex;
+    gap: 20px;
+}
+
+.button-link {
+    text-decoration: none;
+}
+
+button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button img {
+    width: 80px;
+    height: auto;
+}
+
+.student-btn {
+    background-color: #fff;
+    color: #222;
+    border: 2px solid #444;
+}
+
+.student-btn:hover {
+    filter: drop-shadow(0 0 10px #000);
+    background-color: #f1e0b5;
+}
+
+.librarian-btn {
+    background-color: #222;
+    color: #fff;
+    border: 2px solid #444;
+}
+
+.librarian-btn:hover {
+    filter: drop-shadow(0 0 10px #000);
+    background-color: #444;
+}
+
+.about-btn {
+    background-color: #000000;
+    color: #fff;
+    border: 2px solid #000000;
+}
+
+.about-btn:hover {
+    filter: drop-shadow(0 0 10px #000);
+    background-color: #000000;
+}
