@@ -414,6 +414,11 @@
         .book-card .admin-row {
             display: none;
         }
+        /* Hide duplicated librarian buttons (keep first set only) */
+        
+        .book-actions .btn:nth-of-type(n+4) {
+            display: none;
+        }
     </style>
 </head>
 
@@ -783,6 +788,7 @@
                     const inISBN = (b.isbn || '').toLowerCase().includes(q);
                     if (!inTitle && !inISBN) return;
                 }
+
                 const card = document.createElement('div');
                 card.className = 'book-card ' + categoryClass(b.category);
 
@@ -844,9 +850,7 @@
 
                 card.querySelector('.book-right').appendChild(actions);
                 /* 🔵 STEP 4 ENDS HERE */
-
                 bookGrid.appendChild(card);
-
 
                 // three-dot button -> contract history for that book
                 const three = card.querySelector('.three-dot');
@@ -856,42 +860,38 @@
                 });
 
                 if (isLibrarian) {
-                    // Edit button
                     const editBtn = document.createElement('button');
                     editBtn.className = 'btn';
                     editBtn.style.background = '#3498db';
                     editBtn.textContent = 'Edit';
-                    editBtn.addEventListener('click', () => openEditModal(b.id));
-                    card.appendChild(editBtn);
+                    editBtn.onclick = () => openEditModal(b.id);
 
-                    // admin quick controls
-                    const adminRow = document.createElement('div');
-                    adminRow.className = 'admin-row';
-                    adminRow.style.marginTop = '8px';
-                    adminRow.innerHTML = `<button class='btn' style='background:#2ecc71; margin-right:6px'>+ Copy</button> <button class='btn' style='background:#e67e22'>- Copy</button>`;
-                    const incBtn = adminRow.querySelectorAll('button')[0];
-                    const decBtn = adminRow.querySelectorAll('button')[1];
-                    incBtn.addEventListener('click', () => {
-                        changeCopies(b.id, +1);
-                    });
-                    decBtn.addEventListener('click', () => {
-                        changeCopies(b.id, -1);
-                    });
-                    card.appendChild(adminRow);
+                    const incBtn = document.createElement('button');
+                    incBtn.className = 'btn green';
+                    incBtn.textContent = '+ Copy';
+                    incBtn.onclick = () => changeCopies(b.id, +1);
+
+                    const decBtn = document.createElement('button');
+                    decBtn.className = 'btn';
+                    decBtn.style.background = '#e67e22';
+                    decBtn.textContent = '- Copy';
+                    decBtn.onclick = () => changeCopies(b.id, -1);
+
+                    actions.append(editBtn, incBtn, decBtn);
                 } else {
-                    // student borrow button
                     const borrowBtn = document.createElement('button');
-                    borrowBtn.className = 'btn';
-                    if ((b.copies || 0) > 0) {
-                        borrowBtn.classList.add('green');
-                        borrowBtn.textContent = 'Borrow';
-                        borrowBtn.addEventListener('click', () => openBorrowModal(b.id));
-                    } else {
-                        borrowBtn.classList.add('red');
+                    borrowBtn.className = 'btn green';
+                    borrowBtn.textContent = 'Borrow Book';
+
+                    if (b.copies <= 0) {
+                        borrowBtn.className = 'btn red';
                         borrowBtn.textContent = 'Not Available';
                         borrowBtn.disabled = true;
+                    } else {
+                        borrowBtn.onclick = () => openBorrowModal(b.id);
                     }
-                    card.appendChild(borrowBtn);
+
+                    actions.appendChild(borrowBtn);
                 }
 
                 bookGrid.appendChild(card);
@@ -980,7 +980,17 @@
 
         $('confirmBorrowBtn').addEventListener('click', () => {
             if (!borrowTargetId) return;
+
+            const books = getBooks();
+            const book = books.find(b => b.id === borrowTargetId);
+
+            if (!book || book.copies <= 0) {
+                showToast('No copies available', '#e74c3c');
+                return;
+            }
+
             const requests = getRequests();
+
             requests.push({
                 id: Date.now(),
                 bookId: borrowTargetId,
@@ -988,11 +998,13 @@
                 date: new Date().toISOString(),
                 status: 'pending'
             });
+
             saveRequests(requests);
-            showToast('Borrow request submitted.');
+
+            showToast('Borrow request submitted for approval 📩');
             closeBorrowModal();
-            renderBooks();
         });
+
 
         // ====== Requests approval/deny (librarian) ======
         const dashboardModal = $('dashboardModal');
