@@ -312,6 +312,108 @@
             background: #fff;
             z-index: 5;
         }
+        /* === New Split Book Card Design === */
+        
+        .book-card {
+            display: flex;
+            padding: 0;
+            overflow: hidden;
+            min-height: 300px;
+            height: auto;
+            align-items: stretch;
+        }
+        
+        .book-left {
+            width: 38%;
+            padding: 18px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            overflow: hidden;
+            /* 🔥 prevents spill */
+        }
+        
+        .book-left .cat-label {
+            font-size: 14px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 18px;
+        }
+        
+        .book-left .category-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            /* reduced for long names */
+            line-height: 1.3;
+            word-break: break-word;
+            /* 🔥 breaks long words */
+            white-space: normal;
+            max-width: 100%;
+        }
+        
+        .cat-label {
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            opacity: 0.85;
+            margin-bottom: 10px;
+        }
+        
+        .book-right {
+            width: 62%;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .book-right .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: #9c7c3b;
+            margin-bottom: 18px;
+        }
+        
+        .book-meta {
+            font-size: 15px;
+            margin: 6px 0;
+        }
+        
+        .book-actions {
+            margin-top: 18px;
+        }
+        
+        .book-actions .btn {
+            margin: 6px;
+        }
+        
+        .three-dot {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+        
+        .book-actions {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        /* Hide the large default Edit button inside split card */
+        
+        .book-card>.btn {
+            display: none;
+        }
+        /* Hide the original admin copy buttons (old layout) */
+        
+        .book-card .admin-row {
+            display: none;
+        }
     </style>
 </head>
 
@@ -439,7 +541,10 @@
         <div id="categoryModal" class="modal-backdrop">
             <div class="modal">
                 <h3>Category Management</h3>
-                <div style="margin-bottom:8px"><input id="newCategoryInput" placeholder="New Category name" style="width:100%;padding:8px;margin-top:6px"></div>
+                <div style="margin-bottom:8px"><input id="newCategoryInput" placeholder="New Category name" style="width:100%;padding:8px;margin-top:6px">
+
+                    <input id="newCategoryColor" type="color" value="#5b56a6" style="width:100%; height:40px; margin-top:10px; cursor:pointer">
+                </div>
                 <div style="display:flex; gap:8px; margin-bottom:12px"><button id="addCategoryBtn" class="btn green librarian-only">Add Category</button><button id="closeCatBtn" class="btn gray">Close</button></div>
                 <div><strong>Existing Categories</strong></div>
                 <div id="categoriesList" style="max-height:200px; overflow:auto; margin-top:8px"></div>
@@ -465,6 +570,26 @@
         const CATEGORIES_KEY = 'categories_v1';
         const CONTRACTS_KEY = 'contracts_v1';
         const SESSION_KEY = 'logged_in_user';
+        const CATEGORY_COLORS = {
+            "Religion": "#8447b4",
+            "Non-Fiction": "#9f503b",
+            "Non-Fiction Book Special Edition": "#be3984",
+            "Fiction Children's Book": "#8b6753",
+            "Fiction Intermediate Level": "#474b5f",
+            "Fiction High School Level": "#5048a9",
+            "Fiction Advance Level": "#543e93",
+            "Fiction New Releases": "#c53a22",
+            "Magazines Readers Digest": "#7b8900",
+            "Magazines National Geographic": "#13910f",
+            "Magazines Executive Digest": "#32662f",
+            "Encyclopedia": "#bf48b0",
+            "Thesis": "#32ff12",
+            "Dictionary": "#82422e",
+            "General References": "#a86853",
+            "Junior Textbooks": "#737272",
+            "Senior Textbooks": "#373737"
+        };
+
 
         const $ = id => document.getElementById(id);
 
@@ -660,14 +785,69 @@
                 }
                 const card = document.createElement('div');
                 card.className = 'book-card ' + categoryClass(b.category);
+
                 card.innerHTML = `
-                <button class="three-dot" title="Contract / More">⋯</button>
-                <img src="${escapeHtml(b.img||'book1.png')}" alt="${escapeHtml(b.title)}">
-                <div class="book-title">${escapeHtml(b.title)}</div>
-                <div class="meta"><strong>Category:</strong> <span class="category-pill">${escapeHtml(b.category||'Uncategorized')}</span></div>
-                <div class="meta"><strong>Available Copies:</strong> <span id="copies-${b.id}">${b.copies}</span></div>
-                <div class="meta small"><strong>ISBN:</strong> ${escapeHtml(b.isbn||'—')}</div>
-            `;
+    <button class="three-dot" title="Contract / More">⋯</button>
+
+<div class="book-left"
+     style="background:${getCategoryColor(b.category)}">
+
+
+
+        <div class="cat-label">Category:</div>
+        <div class="category-name">${escapeHtml(b.category || 'Uncategorized')}</div>
+    </div>
+
+    <div class="book-right">
+        <div class="book-title">${escapeHtml(b.title)}</div>
+
+        <div class="book-meta">
+            <strong>Available Copies:</strong>
+            <span id="copies-${b.id}">${b.copies}</span>
+        </div>
+
+        <div class="book-meta">
+            <strong>ISBN:</strong> ${escapeHtml(b.isbn || '—')}
+        </div>
+    </div>
+`;
+
+                function getCategoryColor(categoryName) {
+                    return CATEGORY_COLORS[categoryName] || "#95a5a6"; // fallback gray
+                }
+
+
+                /* 🔵 STEP 4 STARTS HERE */
+                const actions = document.createElement('div');
+                actions.className = 'book-actions';
+
+                if (isLibrarian) {
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'btn';
+                    editBtn.style.background = '#3498db';
+                    editBtn.textContent = 'Edit';
+                    editBtn.addEventListener('click', () => openEditModal(b.id));
+
+                    const incBtn = document.createElement('button');
+                    incBtn.className = 'btn green';
+                    incBtn.textContent = '+ Copy';
+                    incBtn.onclick = () => changeCopies(b.id, +1);
+
+                    const decBtn = document.createElement('button');
+                    decBtn.className = 'btn';
+                    decBtn.style.background = '#e67e22';
+                    decBtn.textContent = '- Copy';
+                    decBtn.onclick = () => changeCopies(b.id, -1);
+
+                    actions.append(editBtn, incBtn, decBtn);
+                }
+
+                card.querySelector('.book-right').appendChild(actions);
+                /* 🔵 STEP 4 ENDS HERE */
+
+                bookGrid.appendChild(card);
+
+
                 // three-dot button -> contract history for that book
                 const three = card.querySelector('.three-dot');
                 three.addEventListener('click', (ev) => {
@@ -758,6 +938,23 @@
             const el = $('copies-' + bookId);
             if (el) el.textContent = newVal;
         }
+
+        function getCategoryColor(categoryName) {
+            const cats = getCategories();
+
+            // normalize old format
+            const normalized = cats.map(c =>
+                typeof c === 'string' ? {
+                    name: c,
+                    color: '#95a5a6'
+                } : c
+            );
+
+            const found = normalized.find(c => c.name === categoryName);
+            return found ? found.color : '#95a5a6';
+        }
+
+
 
         // ====== Borrow flow (students) ======
         const borrowModal = $('borrowModal');
@@ -1430,6 +1627,8 @@
         if ($('openCategoryManager')) $('openCategoryManager').addEventListener('click', openCategoryManager);
         if ($('closeCatBtn')) $('closeCatBtn').addEventListener('click', closeCategoryManager);
         if ($('addCategoryBtn')) $('addCategoryBtn').addEventListener('click', () => {
+            renderBooks(); // 🔥 THIS is the missing piece
+
             if (!isLibrarian) return showToast('Only librarians can add categories', '#e74c3c');
             const val = ($('newCategoryInput').value || '').trim();
             if (!val) {
@@ -1596,6 +1795,7 @@
             const btn = document.createElement('button');
             btn.className = 'btn gray librarian-only';
             btn.textContent = 'View Terminated Contracts';
+
             btn.style.marginTop = '10px';
 
             btn.addEventListener('click', () => {
