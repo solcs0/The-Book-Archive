@@ -613,6 +613,7 @@
 
         // seed default data if missing
         function seedData() {
+
             if (!load(CATEGORIES_KEY)) save(CATEGORIES_KEY, ['Fiction', 'Non-Fiction', 'Religious', 'Magazines', 'Science', 'Technology', 'Arts']);
             if (!load(BOOKS_KEY)) {
                 const sample = [{
@@ -665,8 +666,11 @@
         const welcomeText = $('welcomeText');
         welcomeText.innerHTML = `Welcome, ${session.name} (${session.role}) <button id="logoutBtn">Logout</button>`;
         $('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem(SESSION_KEY);
-            window.location.href = 'index.html';
+            const session = load(SESSION_KEY);
+            if (!session) {
+                window.location.href = 'index.html';
+            }
+
         });
 
         // Role detection
